@@ -19,20 +19,17 @@ import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+
 
 public class CollectionListInteractor {
 
     public interface OnCompleteListener{
         void onSuccessCollection(ShopifyCollections collections);
+        void onSuccessProductIds(ShopifyProductIds productIds);
         void onFailureCollection();
     }
-    ShopifyCollections mMainCollection;
-    public void getJsonResponse(String url, final OnCompleteListener listener){
+
+    public void getCollectionsResponse(String url, final OnCompleteListener listener){
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -49,23 +46,43 @@ public class CollectionListInteractor {
                 String json = response.body().string();
 
                 Gson gson = new Gson();
-                mMainCollection = gson.fromJson(json, ShopifyCollections.class);
+                final ShopifyCollections collections = gson.fromJson(json, ShopifyCollections.class);
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        Log.e("THing", String.valueOf(mMainCollection.collections.size()));
-                        listener.onSuccessCollection(mMainCollection);
+                        Log.e("THing", String.valueOf(collections.collections.size()));
+                        listener.onSuccessCollection(collections);
                     }
                 });
-
-
             }
         });
-        if(mMainCollection != null){
-            Log.e("Y", "Not Null");
-        }else{
-            Log.e("Y", "Null");
-        }
+    }
+
+    public void getProductIds(long collectionId, final OnCompleteListener listener){
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("https://shopicruit.myshopify.com/admin/collects.json?collection_id=" + String.valueOf(collectionId) +"&page=1&access_token=c32313df0d0ef512ca64d5b336a0d7c6")
+                .build();
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+                e.printStackTrace();
+                Log.e("Interactor", "Error in product ids");
+            }
+
+            @Override
+            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+                String json = response.body().string();
+                Gson gson = new Gson();
+                Log.e("json", json);
+                ShopifyProductIds shopifyProductIds = gson.fromJson(json, ShopifyProductIds.class);
+                listener.onSuccessProductIds(shopifyProductIds);
+            }
+        });
+    }
+
+    public void getProducts(List<ProductId> productIds){
 
     }
+
 }

@@ -16,6 +16,8 @@ public class CollectionListActivity extends AppCompatActivity implements Collect
 
     private RecyclerView mRecyclerView;
 
+    private List<ShopifyCollection> mCollections;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,8 +34,13 @@ public class CollectionListActivity extends AppCompatActivity implements Collect
 
     @Override
     public void populateRecyclerView(ShopifyCollections collections) {
-        Log.e("Activity", "populating");
+        mCollections = collections.collections;
         mRecyclerView.setAdapter(new MyAdapter(collections.collections));
+
+        for(ShopifyCollection col : collections.collections){
+            mPresenter.getProducts(col.getId());
+        }
+
     }
 
     @Override

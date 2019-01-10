@@ -39,7 +39,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.CollectionViewHold
         return mCollections.length;
     }
 
-    class CollectionViewHolder extends RecyclerView.ViewHolder{
+    class CollectionViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView mNameText;
 
@@ -47,12 +47,17 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.CollectionViewHold
             super(itemView);
 
             mNameText = itemView.findViewById(R.id.collection_name);
+            itemView.setOnClickListener(this);
         }
 
         void bind(String name){
             mNameText.setText(name);
         }
 
+        @Override
+        public void onClick(View view) {
+           Log.e("Adaptor", "Clicked");
+        }
     }
 }
 

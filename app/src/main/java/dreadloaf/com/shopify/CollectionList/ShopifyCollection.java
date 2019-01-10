@@ -4,12 +4,12 @@ import java.util.List;
 
 public class ShopifyCollection {
 
-    private double id;
+    private long id;
     private String handle;
     private String title;
     private ShopifyImage image;
 
-    public double getId() {
+    public long getId() {
         return id;
     }
 
