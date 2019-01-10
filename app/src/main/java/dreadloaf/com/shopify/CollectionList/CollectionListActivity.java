@@ -32,7 +32,8 @@ public class CollectionListActivity extends AppCompatActivity implements Collect
 
     @Override
     public void populateRecyclerView(ShopifyCollections collections) {
-        mRecyclerView.setAdapter(new MyAdapter(collections.collections, this, this, mRecyclerView));
+        Log.e("Activity", "populating");
+        mRecyclerView.setAdapter(new MyAdapter(collections.collections));
     }
 
     @Override

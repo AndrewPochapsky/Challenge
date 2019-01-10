@@ -1,5 +1,8 @@
 package dreadloaf.com.shopify.CollectionList;
 
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -28,7 +31,7 @@ public class CollectionListInteractor {
         void onSuccessCollection(ShopifyCollections collections);
         void onFailureCollection();
     }
-
+    ShopifyCollections mMainCollection;
     public void getJsonResponse(String url, final OnCompleteListener listener){
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -46,9 +49,23 @@ public class CollectionListInteractor {
                 String json = response.body().string();
 
                 Gson gson = new Gson();
-                ShopifyCollections mainCollection = gson.fromJson(json, ShopifyCollections.class);
-                listener.onSuccessCollection(mainCollection);
+                mMainCollection = gson.fromJson(json, ShopifyCollections.class);
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.e("THing", String.valueOf(mMainCollection.collections.size()));
+                        listener.onSuccessCollection(mMainCollection);
+                    }
+                });
+
+
             }
         });
+        if(mMainCollection != null){
+            Log.e("Y", "Not Null");
+        }else{
+            Log.e("Y", "Null");
+        }
+
     }
 }
