@@ -62,7 +62,7 @@ public class CollectionListInteractor {
         });
     }
 
-    public void getProductIds(long collectionId, final OnCompleteListener listener){
+    public void getProductIds(final long collectionId, final OnCompleteListener listener){
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url("https://shopicruit.myshopify.com/admin/collects.json?collection_id=" + String.valueOf(collectionId) +"&page=1&access_token=c32313df0d0ef512ca64d5b336a0d7c6")
@@ -79,12 +79,13 @@ public class CollectionListInteractor {
                 String json = response.body().string();
                 Gson gson = new Gson();
                 ShopifyProductIds shopifyProductIds = gson.fromJson(json, ShopifyProductIds.class);
+                shopifyProductIds.setCollectionId(collectionId);
                 listener.onSuccessProductIds(shopifyProductIds);
             }
         });
     }
 
-    public void getProducts(List<ProductId> productIds, final OnCompleteListener listener){
+    public void getProducts(List<ProductId> productIds, final long collectionId, final OnCompleteListener listener){
         StringBuilder ids = new StringBuilder();
         for(ProductId productId : productIds){
             ids.append(String.valueOf(productId.getId())).append(',');
@@ -108,6 +109,7 @@ public class CollectionListInteractor {
                 Gson gson = new Gson();
                 //Log.e("Int", json);
                 ShopifyProducts shopifyProducts = gson.fromJson(json, ShopifyProducts.class);
+                shopifyProducts.setCollectionId(collectionId);
                 listener.onSuccessProducts(shopifyProducts);
             }
         });

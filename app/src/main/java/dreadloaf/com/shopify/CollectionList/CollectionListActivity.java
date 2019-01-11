@@ -66,7 +66,13 @@ public class CollectionListActivity extends AppCompatActivity implements Collect
         Intent intent = new Intent(this, CollectionDetailsActivity.class);
         //put all of the required info here to extras
         ShopifyCollection collection = mCollections.get(index);
-        ShopifyProducts products = mProducts.get(index);
+        ShopifyProducts products = null;
+        for(ShopifyProducts shopifyProducts : mProducts){
+            if(shopifyProducts.getCollectionId() == collection.getId()){
+                products = shopifyProducts;
+                break;
+            }
+        }
 
         String[] productNames = new String[products.getProducts().size()];
         int[] productInventories = new int[products.getProducts().size()];

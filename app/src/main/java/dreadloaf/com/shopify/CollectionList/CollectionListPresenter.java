@@ -33,7 +33,7 @@ public class CollectionListPresenter implements CollectionListInteractor.OnCompl
     @Override
     public void onSuccessProductIds(ShopifyProductIds productIds) {
         //now it is time to get the products themselves
-        mInteractor.getProducts(productIds.productIds, this);
+        mInteractor.getProducts(productIds.productIds, productIds.getCollectionId(), this);
     }
 
     @Override
