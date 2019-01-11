@@ -87,13 +87,13 @@ public class CollectionListInteractor {
     public void getProducts(List<ProductId> productIds, final OnCompleteListener listener){
         StringBuilder ids = new StringBuilder();
         for(ProductId productId : productIds){
-            ids.append(productId.getId() + ',');
+            ids.append(String.valueOf(productId.getId())).append(',');
         }
-
+        //Log.e("Id String", ids.toString());
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url("https://shopicruit.myshopify.com/admin/products.json?ids="
-                        + ids.toString().substring(0, ids.length()-1)+
+                        + ids.toString()+
                         "&page=1&access_token=c32313df0d0ef512ca64d5b336a0d7c6")
                 .build();
         client.newCall(request).enqueue(new Callback() {
@@ -106,6 +106,7 @@ public class CollectionListInteractor {
             public void onResponse(Call call, Response response) throws IOException {
                 String json = response.body().string();
                 Gson gson = new Gson();
+                //Log.e("Int", json);
                 ShopifyProducts shopifyProducts = gson.fromJson(json, ShopifyProducts.class);
                 listener.onSuccessProducts(shopifyProducts);
             }

@@ -2,7 +2,6 @@ package dreadloaf.com.shopify.CollectionList;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,7 @@ import java.util.List;
 
 import dreadloaf.com.shopify.R;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.CollectionViewHolder>{
+public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAdapter.CollectionViewHolder>{
 
     public interface OnCollectionClickedListener{
         void onClick(int index);
@@ -22,7 +21,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.CollectionViewHold
     private ShopifyCollection[] mCollections;
     private OnCollectionClickedListener mListener;
 
-    public MyAdapter(List<ShopifyCollection> collections, OnCollectionClickedListener listener){
+    public CollectionListAdapter(List<ShopifyCollection> collections, OnCollectionClickedListener listener){
         //Change to array because I was having an issue before and was messing around
         mCollections = collections.toArray(new ShopifyCollection[collections.size()]);
         mListener = listener;

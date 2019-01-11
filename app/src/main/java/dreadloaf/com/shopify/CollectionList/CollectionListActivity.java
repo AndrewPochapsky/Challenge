@@ -13,7 +13,7 @@ import java.util.List;
 import dreadloaf.com.shopify.CollectionDetails.CollectionDetailsActivity;
 import dreadloaf.com.shopify.R;
 
-public class CollectionListActivity extends AppCompatActivity implements CollectionListView, MyAdapter.OnCollectionClickedListener {
+public class CollectionListActivity extends AppCompatActivity implements CollectionListView, CollectionListAdapter.OnCollectionClickedListener {
 
     private CollectionListPresenter mPresenter;
 
@@ -41,7 +41,7 @@ public class CollectionListActivity extends AppCompatActivity implements Collect
     @Override
     public void populateRecyclerView(ShopifyCollections collections) {
         mCollections = collections.collections;
-        mRecyclerView.setAdapter(new MyAdapter(collections.collections, this));
+        mRecyclerView.setAdapter(new CollectionListAdapter(collections.collections, this));
 
         for(ShopifyCollection col : collections.collections){
             mPresenter.getProducts(col.getId());
@@ -57,6 +57,8 @@ public class CollectionListActivity extends AppCompatActivity implements Collect
     @Override
     public void onProductsAcquired(ShopifyProducts products) {
         mProducts.add(products);
+        //Log.e("CollectionListAct", "NumProducts: " + String.valueOf(products.getProducts().size()));
+
     }
 
     @Override
