@@ -70,6 +70,7 @@ public class CollectionListActivity extends AppCompatActivity implements Collect
                 break;
             }
         }
+
         if(products != null){
             String[] productNames = new String[products.getProducts().size()];
             int[] productInventories = new int[products.getProducts().size()];

@@ -55,7 +55,7 @@ public class CollectionDetailsAdapter extends RecyclerView.Adapter<CollectionDet
 
         void bind(String productName, int inventory, String collectionName, String collectionImageUrl){
             mProductNameText.setText(productName);
-            mInventoryText.setText(String.valueOf(inventory));
+            mInventoryText.setText("Inventory: " + String.valueOf(inventory));
             mCollectionNameText.setText(collectionName);
             new DownloadImageTask(mCollectionImageView)
                     .execute(collectionImageUrl);
