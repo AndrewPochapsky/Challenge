@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.io.InputStream;
 
 import dreadloaf.com.shopify.CollectionList.CollectionListAdapter;
+import dreadloaf.com.shopify.DownloadImageTask;
 import dreadloaf.com.shopify.R;
 
 public class CollectionDetailsAdapter extends RecyclerView.Adapter<CollectionDetailsAdapter.ProductViewHolder>{
@@ -65,32 +66,6 @@ public class CollectionDetailsAdapter extends RecyclerView.Adapter<CollectionDet
             mCollectionNameText.setText(collectionName);
             new DownloadImageTask(mCollectionImageView)
                     .execute(collectionImageUrl);
-
-        }
-        //Used https://stackoverflow.com/questions/2471935/how-to-load-an-imageview-by-url-in-android
-        private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-            ImageView bmImage;
-
-            public DownloadImageTask(ImageView bmImage) {
-                this.bmImage = bmImage;
-            }
-
-            protected Bitmap doInBackground(String... urls) {
-                String urldisplay = urls[0];
-                Bitmap mIcon11 = null;
-                try {
-                    InputStream in = new java.net.URL(urldisplay).openStream();
-                    mIcon11 = BitmapFactory.decodeStream(in);
-                } catch (Exception e) {
-                    Log.e("Error", e.getMessage());
-                    e.printStackTrace();
-                }
-                return mIcon11;
-            }
-
-            protected void onPostExecute(Bitmap result) {
-                bmImage.setImageBitmap(result);
-            }
         }
     }
 }

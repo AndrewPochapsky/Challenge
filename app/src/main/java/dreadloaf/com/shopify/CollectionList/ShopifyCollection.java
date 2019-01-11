@@ -1,5 +1,7 @@
 package dreadloaf.com.shopify.CollectionList;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class ShopifyCollection {
@@ -8,6 +10,8 @@ public class ShopifyCollection {
     private String handle;
     private String title;
     private ShopifyImage image;
+    @SerializedName("body_html")
+    private String description;
 
     public long getId() {
         return id;
@@ -23,5 +27,9 @@ public class ShopifyCollection {
 
     public ShopifyImage getimage() {
         return image;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

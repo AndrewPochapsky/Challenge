@@ -91,6 +91,8 @@ public class CollectionListActivity extends AppCompatActivity implements Collect
             intent.putExtra("productInventories", productInventories);
             intent.putExtra("collectionName", collection.getTitle());
             intent.putExtra("collectionImageUrl", collection.getimage().getSource());
+            intent.putExtra("collectionDescription", collection.getDescription());
+            Log.e("Desc", collection.getDescription());
             startActivity(intent);
         }else{
             Toast.makeText(this, "Please try again in a second", Toast.LENGTH_SHORT).show();
