@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,23 +74,27 @@ public class CollectionListActivity extends AppCompatActivity implements Collect
                 break;
             }
         }
-
-        String[] productNames = new String[products.getProducts().size()];
-        int[] productInventories = new int[products.getProducts().size()];
-        for(int i = 0; i < productNames.length; i++){
-            ShopifyProduct currentProduct = products.getProducts().get(i);
-            int totalInventory = 0;
-            for(ProductVariant variant : currentProduct.getVariants()){
-                totalInventory += variant.getInventory();
+        if(products != null){
+            String[] productNames = new String[products.getProducts().size()];
+            int[] productInventories = new int[products.getProducts().size()];
+            for(int i = 0; i < productNames.length; i++){
+                ShopifyProduct currentProduct = products.getProducts().get(i);
+                int totalInventory = 0;
+                for(ProductVariant variant : currentProduct.getVariants()){
+                    totalInventory += variant.getInventory();
+                }
+                productNames[i] = currentProduct.getTitle();
+                productInventories[i] = totalInventory;
             }
-            productNames[i] = currentProduct.getTitle();
-            productInventories[i] = totalInventory;
+
+            intent.putExtra("productNames", productNames);
+            intent.putExtra("productInventories", productInventories);
+            intent.putExtra("collectionName", collection.getTitle());
+            intent.putExtra("collectionImageUrl", collection.getimage().getSource());
+            startActivity(intent);
+        }else{
+            Toast.makeText(this, "Please try again in a second", Toast.LENGTH_SHORT).show();
         }
 
-        intent.putExtra("productNames", productNames);
-        intent.putExtra("productInventories", productInventories);
-        intent.putExtra("collectionName", collection.getTitle());
-        intent.putExtra("collectionImageUrl", collection.getimage().getSource());
-        startActivity(intent);
     }
 }
