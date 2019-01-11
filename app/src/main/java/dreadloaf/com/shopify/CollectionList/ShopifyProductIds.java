@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ShopifyProductIds {
     @SerializedName("collects")
-    List<ProductId> productIds;
+    private List<ProductId> productIds;
 
     private long collectionId;
 
@@ -16,5 +16,9 @@ public class ShopifyProductIds {
 
     public void setCollectionId(long collectionId) {
         this.collectionId = collectionId;
+    }
+
+    public List<ProductId> getProductIds() {
+        return productIds;
     }
 }

@@ -36,7 +36,6 @@ public class CollectionListActivity extends AppCompatActivity implements Collect
 
         mPresenter = new CollectionListPresenter(this, new CollectionListInteractor());
         mPresenter.getCollections();
-
     }
 
     @Override
@@ -47,25 +46,22 @@ public class CollectionListActivity extends AppCompatActivity implements Collect
         for(ShopifyCollection col : collections.collections){
             mPresenter.getProducts(col.getId());
         }
-
     }
 
     @Override
     public void onNetworkFailure() {
-
+        Toast.makeText(this, "Error retrieving data.", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onProductsAcquired(ShopifyProducts products) {
         mProducts.add(products);
-        //Log.e("CollectionListAct", "NumProducts: " + String.valueOf(products.getProducts().size()));
-
     }
 
     @Override
     public void onClick(int index) {
         Intent intent = new Intent(this, CollectionDetailsActivity.class);
-        //put all of the required info here to extras
+
         ShopifyCollection collection = mCollections.get(index);
         ShopifyProducts products = null;
         for(ShopifyProducts shopifyProducts : mProducts){
@@ -92,7 +88,6 @@ public class CollectionListActivity extends AppCompatActivity implements Collect
             intent.putExtra("collectionName", collection.getTitle());
             intent.putExtra("collectionImageUrl", collection.getimage().getSource());
             intent.putExtra("collectionDescription", collection.getDescription());
-            Log.e("Desc", collection.getDescription());
             startActivity(intent);
         }else{
             Toast.makeText(this, "Please try again in a second", Toast.LENGTH_SHORT).show();

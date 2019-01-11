@@ -1,9 +1,5 @@
 package dreadloaf.com.shopify.CollectionList;
 
-import android.util.Log;
-
-import java.util.List;
-
 public class CollectionListPresenter implements CollectionListInteractor.OnCompleteListener {
     private CollectionListView mView;
     private CollectionListInteractor mInteractor;
@@ -25,15 +21,13 @@ public class CollectionListPresenter implements CollectionListInteractor.OnCompl
     public void onSuccessCollection(ShopifyCollections collections) {
         if(mView != null){
             mView.populateRecyclerView(collections);
-        }else{
-            Log.e("pres", "is null");
         }
     }
 
     @Override
     public void onSuccessProductIds(ShopifyProductIds productIds) {
         //now it is time to get the products themselves
-        mInteractor.getProducts(productIds.productIds, productIds.getCollectionId(), this);
+        mInteractor.getProducts(productIds.getProductIds(), productIds.getCollectionId(), this);
     }
 
     @Override
@@ -44,7 +38,7 @@ public class CollectionListPresenter implements CollectionListInteractor.OnCompl
     }
 
     @Override
-    public void onFailureCollection() {
+    public void onFailure() {
         if(mView != null){
             mView.onNetworkFailure();
         }

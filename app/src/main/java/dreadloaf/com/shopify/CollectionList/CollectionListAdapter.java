@@ -22,7 +22,7 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
     private OnCollectionClickedListener mListener;
 
     public CollectionListAdapter(List<ShopifyCollection> collections, OnCollectionClickedListener listener){
-        //Change to array because I was having an issue before and was messing around
+        //Converted to array because I was having an issue before and was trying different things to fix it
         mCollections = collections.toArray(new ShopifyCollection[collections.size()]);
         mListener = listener;
     }

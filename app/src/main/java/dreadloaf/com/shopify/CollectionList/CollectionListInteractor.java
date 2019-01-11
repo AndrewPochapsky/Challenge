@@ -1,22 +1,10 @@
 package dreadloaf.com.shopify.CollectionList;
 
-import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
-
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -30,7 +18,7 @@ public class CollectionListInteractor {
         void onSuccessCollection(ShopifyCollections collections);
         void onSuccessProductIds(ShopifyProductIds productIds);
         void onSuccessProducts(ShopifyProducts products);
-        void onFailureCollection();
+        void onFailure();
     }
 
     public void getCollectionsResponse(String url, final OnCompleteListener listener){
@@ -41,7 +29,7 @@ public class CollectionListInteractor {
         client.newCall(request).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(okhttp3.Call call, IOException e) {
-                e.printStackTrace();
+                listener.onFailure();
             }
 
             @Override
@@ -54,7 +42,6 @@ public class CollectionListInteractor {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        Log.e("THing", String.valueOf(collections.collections.size()));
                         listener.onSuccessCollection(collections);
                     }
                 });
@@ -70,8 +57,7 @@ public class CollectionListInteractor {
         client.newCall(request).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(okhttp3.Call call, IOException e) {
-                e.printStackTrace();
-                Log.e("Interactor", "Error in product ids");
+                listener.onFailure();
             }
 
             @Override
@@ -90,7 +76,7 @@ public class CollectionListInteractor {
         for(ProductId productId : productIds){
             ids.append(String.valueOf(productId.getId())).append(',');
         }
-        //Log.e("Id String", ids.toString());
+
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url("https://shopicruit.myshopify.com/admin/products.json?ids="
@@ -100,14 +86,13 @@ public class CollectionListInteractor {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                listener.onFailure();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String json = response.body().string();
                 Gson gson = new Gson();
-                //Log.e("Int", json);
                 ShopifyProducts shopifyProducts = gson.fromJson(json, ShopifyProducts.class);
                 shopifyProducts.setCollectionId(collectionId);
                 listener.onSuccessProducts(shopifyProducts);
