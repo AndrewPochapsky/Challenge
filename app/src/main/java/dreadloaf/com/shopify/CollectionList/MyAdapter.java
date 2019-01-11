@@ -14,12 +14,18 @@ import dreadloaf.com.shopify.R;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.CollectionViewHolder>{
 
+    public interface OnCollectionClickedListener{
+        void onClick(int index);
+    }
 
-    ShopifyCollection[] mCollections;
 
-    public MyAdapter(List<ShopifyCollection> collections){
+    private ShopifyCollection[] mCollections;
+    private OnCollectionClickedListener mListener;
+
+    public MyAdapter(List<ShopifyCollection> collections, OnCollectionClickedListener listener){
         //Change to array because I was having an issue before and was messing around
         mCollections = collections.toArray(new ShopifyCollection[collections.size()]);
+        mListener = listener;
     }
 
     @NonNull
@@ -31,7 +37,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.CollectionViewHold
 
     @Override
     public void onBindViewHolder(@NonNull CollectionViewHolder collectionViewHolder, int i) {
-        collectionViewHolder.bind(mCollections[i].getTitle());
+        collectionViewHolder.bind(mCollections[i].getTitle(), i);
     }
 
     @Override
@@ -42,6 +48,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.CollectionViewHold
     class CollectionViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView mNameText;
+        int index;
 
         public CollectionViewHolder(@NonNull View itemView){
             super(itemView);
@@ -50,13 +57,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.CollectionViewHold
             itemView.setOnClickListener(this);
         }
 
-        void bind(String name){
+        void bind(String name, int index){
             mNameText.setText(name);
+            this.index = index;
         }
 
         @Override
         public void onClick(View view) {
-           Log.e("Adaptor", "Clicked");
+           mListener.onClick(index);
         }
     }
 }

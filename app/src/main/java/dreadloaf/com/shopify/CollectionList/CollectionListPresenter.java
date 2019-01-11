@@ -38,7 +38,9 @@ public class CollectionListPresenter implements CollectionListInteractor.OnCompl
 
     @Override
     public void onSuccessProducts(ShopifyProducts products) {
-        Log.e("Presenter", "Success!");
+        if(mView != null){
+            mView.onProductsAcquired(products);
+        }
     }
 
     @Override

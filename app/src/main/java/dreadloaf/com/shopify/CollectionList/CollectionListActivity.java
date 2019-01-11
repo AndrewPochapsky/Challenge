@@ -1,27 +1,33 @@
 package dreadloaf.com.shopify.CollectionList;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import dreadloaf.com.shopify.CollectionDetails.CollectionDetailsActivity;
 import dreadloaf.com.shopify.R;
 
-public class CollectionListActivity extends AppCompatActivity implements CollectionListView {
+public class CollectionListActivity extends AppCompatActivity implements CollectionListView, MyAdapter.OnCollectionClickedListener {
 
     private CollectionListPresenter mPresenter;
 
     private RecyclerView mRecyclerView;
 
     private List<ShopifyCollection> mCollections;
+    private List<ShopifyProducts> mProducts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mProducts = new ArrayList<>();
 
         mRecyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -35,7 +41,7 @@ public class CollectionListActivity extends AppCompatActivity implements Collect
     @Override
     public void populateRecyclerView(ShopifyCollections collections) {
         mCollections = collections.collections;
-        mRecyclerView.setAdapter(new MyAdapter(collections.collections));
+        mRecyclerView.setAdapter(new MyAdapter(collections.collections, this));
 
         for(ShopifyCollection col : collections.collections){
             mPresenter.getProducts(col.getId());
@@ -46,5 +52,36 @@ public class CollectionListActivity extends AppCompatActivity implements Collect
     @Override
     public void onNetworkFailure() {
 
+    }
+
+    @Override
+    public void onProductsAcquired(ShopifyProducts products) {
+        mProducts.add(products);
+    }
+
+    @Override
+    public void onClick(int index) {
+        Intent intent = new Intent(this, CollectionDetailsActivity.class);
+        //put all of the required info here to extras
+        ShopifyCollection collection = mCollections.get(index);
+        ShopifyProducts products = mProducts.get(index);
+
+        String[] productNames = new String[products.getProducts().size()];
+        int[] productInventories = new int[products.getProducts().size()];
+        for(int i = 0; i < productNames.length; i++){
+            ShopifyProduct currentProduct = products.getProducts().get(i);
+            int totalInventory = 0;
+            for(ProductVariant variant : currentProduct.getVariants()){
+                totalInventory += variant.getInventory();
+            }
+            productNames[i] = currentProduct.getTitle();
+            productInventories[i] = totalInventory;
+        }
+
+        intent.putExtra("productNames", productNames);
+        intent.putExtra("productInventories", productInventories);
+        intent.putExtra("collectionName", collection.getTitle());
+        intent.putExtra("collectionImageUrl", collection.getimage().getSource());
+        startActivity(intent);
     }
 }

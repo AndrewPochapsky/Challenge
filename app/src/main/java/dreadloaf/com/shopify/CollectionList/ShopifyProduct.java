@@ -8,17 +8,8 @@ public class ShopifyProduct {
     private String title;
     private List<ProductVariant> variants;
 
-    private int totalInventory;
-
     public String getTitle() {
         return title;
-    }
-    public int getTotalInventory() {
-        return totalInventory;
-    }
-
-    public void setTotalInventory(int totalInventory) {
-        this.totalInventory = totalInventory;
     }
 
     public List<ProductVariant> getVariants() {
