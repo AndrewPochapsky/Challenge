@@ -33,14 +33,13 @@ public class CollectionListPresenter implements CollectionListInteractor.OnCompl
     @Override
     public void onSuccessProductIds(ShopifyProductIds productIds) {
         //now it is time to get the products themselves
-        mInteractor.getProducts(productIds.productIds);
-        for(ProductId p : productIds.productIds){
-            Log.e("Presenter", String.valueOf(p.getId()));
-        }
-        Log.e("Presentor", "---------------------------------------");
+        mInteractor.getProducts(productIds.productIds, this);
     }
 
-
+    @Override
+    public void onSuccessProducts(ShopifyProducts products) {
+        Log.e("Presenter", "Success!");
+    }
 
     @Override
     public void onFailureCollection() {
