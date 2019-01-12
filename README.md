@@ -1,4 +1,4 @@
-# Shopify-Android-Challenge-2019
+# Challenge
 
 This is my submission to the shopify android intern challenge!
 
