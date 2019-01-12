@@ -1,6 +1,6 @@
 # Challenge
 
-This is my submission to the shopify android intern challenge!
+This is my submission intern challenge!
 
 Made using:
 - Java
