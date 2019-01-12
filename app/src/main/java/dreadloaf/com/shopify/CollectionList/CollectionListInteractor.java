@@ -21,6 +21,9 @@ public class CollectionListInteractor {
         void onFailure();
     }
 
+
+
+
     public void getCollectionsResponse(String url, final OnCompleteListener listener){
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
