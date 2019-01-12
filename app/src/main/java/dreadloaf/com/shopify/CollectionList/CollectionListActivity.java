@@ -1,11 +1,17 @@
 package dreadloaf.com.shopify.CollectionList;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -19,7 +25,7 @@ public class CollectionListActivity extends AppCompatActivity implements Collect
     private CollectionListPresenter mPresenter;
 
     private RecyclerView mRecyclerView;
-
+    private LinearLayout mErrorLayout;
     private List<ShopifyCollection> mCollections;
     private List<ShopifyProducts> mProducts;
 
@@ -30,12 +36,30 @@ public class CollectionListActivity extends AppCompatActivity implements Collect
 
         mProducts = new ArrayList<>();
 
+        findViewById(R.id.retry_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(hasNetworkConnection()){
+                    mErrorLayout.setVisibility(View.GONE);
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    mPresenter.getCollections();
+                }
+            }
+        });
+
         mRecyclerView = findViewById(R.id.recycler_view);
+        mErrorLayout = findViewById(R.id.network_error_layout);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
 
         mPresenter = new CollectionListPresenter(this, new CollectionListInteractor());
-        mPresenter.getCollections();
+        if(hasNetworkConnection()){
+            mErrorLayout.setVisibility(View.GONE);
+            mPresenter.getCollections();
+        }else{
+            mErrorLayout.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -94,5 +118,22 @@ public class CollectionListActivity extends AppCompatActivity implements Collect
             Toast.makeText(this, "Please try again in a second", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private boolean hasNetworkConnection() {
+        boolean hasConnectedWifi = false;
+        boolean hasConnectedMobile = false;
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    hasConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    hasConnectedMobile = true;
+        }
+        return hasConnectedWifi || hasConnectedMobile;
     }
 }
