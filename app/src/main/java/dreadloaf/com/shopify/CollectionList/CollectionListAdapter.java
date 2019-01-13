@@ -62,7 +62,7 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
         }
 
         void bind(String name, int index, String imageUrl){
-            mNameText.setText(name);
+            mNameText.setText(name.substring(0, name.indexOf(" ")));
             this.index = index;
             new DownloadImageTask(mImageView)
                     .execute(imageUrl);
