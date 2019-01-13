@@ -1,6 +1,6 @@
 # Challenge
 
-This is my submission intern challenge!
+This is my submission for the intern challenge!
 
 Made using:
 - Java
